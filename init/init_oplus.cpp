@@ -25,20 +25,29 @@ void vendor_process_bootenv() {
     auto prjname = std::stoi(GetProperty("ro.boot.prjname", "0"));
 
     switch (hw_region_id) {
-        case 21: // CN_IN
-            if (prjname == 22811) { // CN
-                InitPropertySet("ro.boot.hardware.revision", "CN");
-            } else if (prjname == 22861) { // IN
+        case 0:  // aston IN/EU
+            if (prjname == 23861) {      // aston IN
                 InitPropertySet("ro.boot.hardware.revision", "IN");
             }
             break;
-        case 22: // EU
+        case 21: // CN_IN (salami / aston)
+            if (prjname == 22811) {      // salami CN
+                InitPropertySet("ro.boot.hardware.revision", "CN");
+            } else if (prjname == 23801) { // aston CN
+                InitPropertySet("ro.boot.hardware.revision", "CN");
+            } else if (prjname == 22861) { // salami IN
+                InitPropertySet("ro.boot.hardware.revision", "IN");
+            }
+            break;
+        case 22: // salami EU
             InitPropertySet("ro.boot.hardware.revision", "EU");
             break;
-        case 23: // NA
+        case 23: // NA (aston / salami)
+            // both prj 23861 (aston NA) and 22861 (salami NA) map to NA
             InitPropertySet("ro.boot.hardware.revision", "NA");
             break;
         default:
             LOG(ERROR) << "Unexpected region ID: " << hw_region_id;
     }
 }
+
